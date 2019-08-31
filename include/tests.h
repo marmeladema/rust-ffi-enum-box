@@ -20,13 +20,13 @@ typedef enum {
 
 typedef struct {
     scheme_type_tag_t tag;
-    void *data[2];
+    void *data;
 } scheme_type_t;
 
-static const scheme_type_t SCHEME_TYPE_IP = {.tag = SCHEME_TYPE_TAG_IP, .data = {NULL, NULL}};
-static const scheme_type_t SCHEME_TYPE_BYTES = {.tag = SCHEME_TYPE_TAG_BYTES, .data = {NULL, NULL}};
-static const scheme_type_t SCHEME_TYPE_INT = {.tag = SCHEME_TYPE_TAG_INT, .data = {NULL, NULL}};
-static const scheme_type_t SCHEME_TYPE_BOOL = {.tag = SCHEME_TYPE_TAG_BOOL, .data = {NULL, NULL}};
+static const scheme_type_t SCHEME_TYPE_IP = {.tag = SCHEME_TYPE_TAG_IP, .data = NULL};
+static const scheme_type_t SCHEME_TYPE_BYTES = {.tag = SCHEME_TYPE_TAG_BYTES, .data = NULL};
+static const scheme_type_t SCHEME_TYPE_INT = {.tag = SCHEME_TYPE_TAG_INT, .data = NULL};
+static const scheme_type_t SCHEME_TYPE_BOOL = {.tag = SCHEME_TYPE_TAG_BOOL, .data = NULL};
 
 typedef struct scheme scheme_t;
 
