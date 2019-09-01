@@ -1,3 +1,6 @@
+use num_enum::TryFromPrimitive;
+use std::convert::TryFrom;
+
 #[derive(Debug)]
 pub enum SchemeType {
     Ip,
@@ -8,25 +11,32 @@ pub enum SchemeType {
     Map(Box<SchemeType>),
 }
 
-#[repr(C)]
-pub enum CSchemeType {
+#[derive(Debug, Eq, PartialEq, TryFromPrimitive)]
+#[repr(u8)]
+enum CSchemeTypeTag {
     Ip,
     Bytes,
     Int,
     Bool,
-    Array(*mut SchemeType),
-    Map(*mut SchemeType),
+    Array,
+    Map,
+}
+
+#[repr(C)]
+pub struct CSchemeType {
+    tag: u8,
+    data: *mut SchemeType,
 }
 
 impl From<CSchemeType> for SchemeType {
     fn from(ty: CSchemeType) -> Self {
-        match ty {
-            CSchemeType::Ip => SchemeType::Ip,
-            CSchemeType::Bytes => SchemeType::Bytes,
-            CSchemeType::Int => SchemeType::Int,
-            CSchemeType::Bool => SchemeType::Bool,
-            CSchemeType::Array(arr) => SchemeType::Array(unsafe { Box::from_raw(arr) }),
-            CSchemeType::Map(map) => SchemeType::Map(unsafe { Box::from_raw(map) }),
+        match CSchemeTypeTag::try_from(ty.tag).unwrap() {
+            CSchemeTypeTag::Ip => SchemeType::Ip,
+            CSchemeTypeTag::Bytes => SchemeType::Bytes,
+            CSchemeTypeTag::Int => SchemeType::Int,
+            CSchemeTypeTag::Bool => SchemeType::Bool,
+            CSchemeTypeTag::Array => SchemeType::Array(unsafe { Box::from_raw(ty.data) }),
+            CSchemeTypeTag::Map => SchemeType::Map(unsafe { Box::from_raw(ty.data) }),
         }
     }
 }

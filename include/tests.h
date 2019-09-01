@@ -19,7 +19,7 @@ typedef enum {
 } scheme_type_tag_t;
 
 typedef struct {
-    scheme_type_tag_t tag;
+    uint8_t tag;
     void *data;
 } scheme_type_t;
 
