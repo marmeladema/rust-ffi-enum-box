@@ -25,7 +25,7 @@ enum CSchemeTypeTag {
 #[repr(C)]
 pub struct CSchemeType {
     tag: u8,
-    data: *mut SchemeType,
+    data: Option<Box<SchemeType>>,
 }
 
 impl From<CSchemeType> for SchemeType {
@@ -35,8 +35,8 @@ impl From<CSchemeType> for SchemeType {
             CSchemeTypeTag::Bytes => SchemeType::Bytes,
             CSchemeTypeTag::Int => SchemeType::Int,
             CSchemeTypeTag::Bool => SchemeType::Bool,
-            CSchemeTypeTag::Array => SchemeType::Array(unsafe { Box::from_raw(ty.data) }),
-            CSchemeTypeTag::Map => SchemeType::Map(unsafe { Box::from_raw(ty.data) }),
+            CSchemeTypeTag::Array => SchemeType::Array(ty.data.unwrap()),
+            CSchemeTypeTag::Map => SchemeType::Map(ty.data.unwrap()),
         }
     }
 }
